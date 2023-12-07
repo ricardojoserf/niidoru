@@ -1,7 +1,5 @@
 package main
 
-import "os"
-import "fmt"
 import "syscall"
 import "unsafe"
 import "strings"
@@ -77,6 +75,7 @@ func GetProcessByName(process_name string) []uintptr{
 }
 
 
+/*
 func main() {
    process_name := os.Args[1]
    var proc_handles_slice []uintptr = GetProcessByName(process_name);
@@ -85,3 +84,4 @@ func main() {
       fmt.Println("[+] Handle: ", proc_handles_slice[i], "\tPID: ", GetProcessId(proc_handles_slice[i]))
     }
 }
+*/
