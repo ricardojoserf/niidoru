@@ -1,3 +1,3 @@
-module example.com/greetings
+module main
 
 go 1.21.4
