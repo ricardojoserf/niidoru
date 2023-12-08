@@ -6,6 +6,9 @@ Framework for Process Injection using Go.
 go run . -m <METHOD> [ -p <PID> | -n <PROCESS_NAME> ] [ -h HEXADECIMAL_PAYLOAD ]
 ```
 - -m (Mandatory): Process injection method. Options: 1, 2, 3
+    - **Method 1** (*-m 1*) or **CreateRemoteThread**: OpenProcess + VirtualAllocEx + WriteProcessMemory + CreateRemoteThread + CloseHandle
+    - **Method 2** (*-m 2*) or **QueueUserAPC**: OpenProcess + VirtualAllocEx + WriteProcessMemory + OpenThread + QueueUserAPC + CloseHandle
+    - **Method 3** (*-m 3*) or **EarlyBird**: CreateProcess + VirtualAllocEx + WriteProcessMemory + VirtualProtectEx + QueueUserAPC + ResumeThread + CloseHandle
 
 - -p (Optional):  Process ID or PID. Examples: 1234
 
@@ -13,31 +16,11 @@ go run . -m <METHOD> [ -p <PID> | -n <PROCESS_NAME> ] [ -h HEXADECIMAL_PAYLOAD ]
 
 - -h (Optional):  Hexadecimal payload. It can be in the format "\x50\x51\x52" or "505152". Default: Payload to pop calc.exe 
 
-------------------------------
-
-## Methods
-
-**Method 1** (*-m 1*) or **CreateRemoteThread**: 
-
-```
-OpenProcess + VirtualAllocEx + WriteProcessMemory + CreateRemoteThread + CloseHandle
-```
-
-**Method 2** (*-m 2*) or **QueueUserAPC**: 
-
-```
-OpenProcess + VirtualAllocEx + WriteProcessMemory + OpenThread + QueueUserAPC + CloseHandle
-```
-
-**Method 3** (*-m 3*) or **EarlyBird**: 
-
-```
-CreateProcess + VirtualAllocEx + WriteProcessMemory + VirtualProtectEx + QueueUserAPC + ResumeThread + CloseHandle
-```
+<br>
 
 ------------------------------
 
-## Examples:
+### Examples:
 
 Process injection using CreateRemoteThread method, targeting a notepad.exe process and with a payload in hexadecimal format with "\x":  
 
@@ -57,9 +40,11 @@ Process injection using EarlyBird method, spawning a new notepad.exe process and
 go run . -m 3 -n c:\windows\system32\notepad.exe 
 ```
 
+<br>
+
 ------------------------------
 
-## Binary
+### Binary
 
 Compile:
 
