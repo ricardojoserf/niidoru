@@ -1,39 +1,8 @@
 package main
 
-import "syscall"
 import "unsafe"
 import "strings"
 import "unicode/utf8"
-
-
-func NtGetNextProcess(handle uintptr, MAX_ALLOWED int, param3 int, param4 int, outHandle uintptr) uintptr {
-   ret, _, _ := syscall.NewLazyDLL("ntdll.dll").NewProc("NtGetNextProcess").Call(
-      uintptr(handle),
-      uintptr(MAX_ALLOWED),
-      uintptr(param3),
-      uintptr(param4),
-      uintptr(outHandle),
-   )
-   return uintptr(ret)
-}
-
-
-func GetProcessImageFileName(hProcess uintptr, lpImageFileName uintptr, nSize int) uintptr {
-   ret, _, _ := syscall.NewLazyDLL("psapi.dll").NewProc("GetProcessImageFileNameA").Call(
-      uintptr(hProcess),
-      uintptr(lpImageFileName),
-      uintptr(nSize),
-   )
-   return uintptr(ret)
-}
-
-
-func GetProcessId(handle uintptr) uintptr {
-   ret, _, _ := syscall.NewLazyDLL("kernel32.dll").NewProc("GetProcessId").Call(
-      uintptr(handle),
-   )
-   return uintptr(ret)
-}
 
 
 func Reverse(s string) string {
@@ -73,15 +42,3 @@ func GetProcessByName(process_name string) []uintptr{
    }
    return proc_handles_slice;
 }
-
-
-/*
-func main() {
-   process_name := os.Args[1]
-   var proc_handles_slice []uintptr = GetProcessByName(process_name);
-   // Example of use: Get process ID
-   for i := range proc_handles_slice {
-      fmt.Println("[+] Handle: ", proc_handles_slice[i], "\tPID: ", GetProcessId(proc_handles_slice[i]))
-    }
-}
-*/
