@@ -5,18 +5,16 @@ Framework for Process Injection using Go.
 ```
 go run . -m <METHOD> [ -p <PID> | -n <PROCESS_NAME> ] [ -h HEXADECIMAL_PAYLOAD ]
 ```
-- -m (Mandatory): Process injection method.
+- -m (Mandatory): Process injection method. Options:
     - *-m 1*: **Method 1** or **CreateRemoteThread** method (OpenProcess + VirtualAllocEx + WriteProcessMemory + CreateRemoteThread + CloseHandle)
     - *-m 2*: **Method 2** or **QueueUserAPC** method (OpenProcess + VirtualAllocEx + WriteProcessMemory + OpenThread + QueueUserAPC + CloseHandle)
     - *-m 3*: **Method 3** or **EarlyBird** method (CreateProcess + VirtualAllocEx + WriteProcessMemory + VirtualProtectEx + QueueUserAPC + ResumeThread + CloseHandle)
 
-- -p (Optional):  Process ID or PID. Examples: 1234
+- -p (Optional):  Process ID or PID. Example: 1234
 
 - -n (Optional):  Process name. Example: notepad.exe
 
 - -h (Optional):  Hexadecimal payload. It can be in the format "\x50\x51\x52" or "505152". Default: Payload to pop calc.exe 
-
-<br>
 
 ------------------------------
 
@@ -44,7 +42,6 @@ Screenshot of the three examples:
 
 ![img1](https://raw.githubusercontent.com/ricardojoserf/ricardojoserf.github.io/master/images/niidoru/Screenshot_1.png)
 
-<br>
 
 ------------------------------
 
