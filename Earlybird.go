@@ -28,6 +28,12 @@ func CreateProcess(lpApplicationName string, lpCommandLine string, lpProcessAttr
 
 
 func Earlybird_Injection(proc string, payload []byte) {
+   // Check
+   if (proc == ""){
+      fmt.Println("[-] Program name or path is necessary. ");
+      os.Exit(-1);
+   }
+
    // CreateProcess
    var sI syscall.StartupInfo;
    var pI syscall.ProcessInformation;
@@ -36,7 +42,7 @@ func Earlybird_Injection(proc string, payload []byte) {
    if (err != nil){
       fmt.Println("[+] CreateProcess error: \t\t", err);
    }
-   fmt.Println("[+] Process ID: \t\t\t", pI.ProcessId);
+   fmt.Println("[+] Process PID: \t\t\t", pI.ProcessId);
    fmt.Println("[+] Thread ID: \t\t\t\t", pI.ThreadId);
 
    // VirtualAllocEx

