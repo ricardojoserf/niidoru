@@ -1,18 +1,28 @@
 # go-processinjection
 
-Different methods for Process Injection using Go
+Different methods for Process Injection using Go.
 
 ```
-go run . -p <PROCESS_NAME> -m <METHOD> 
+go run . -m <METHOD> [ -p <PID> ]  [ -n <PROCESS_NAME> ] 
 ```
-- -p: Process name. Example: notepad.exe
+- -m (Mandatory): Process injection method. Options: 1, 2, 3
 
-- -m: Process injection method. Options: 1, 2, 3
+- -p (Optional):  Process ID or PID. Examples: 1234
 
-Example:
+- -n (Optional):  Process name. Example: notepad.exe
+
+Examples:
 
 ```
-go run . -p notepad.exe -m 3 
+go run . -m 1 -p notepad.exe 
+```
+
+```
+go run . -m 2 -p 1234 
+```
+
+```
+go run . -m 3 -p c:\windows\system32\notepad.exe 
 ```
 
 ## Methods
@@ -46,5 +56,5 @@ go build
 Run:
 
 ```` 
-main.exe -p <PROCESS_NAME> -m <METHOD>
+main.exe -m <METHOD> [ -n <PROCESS_NAME> ] [ -p <PID> ]
 ```
