@@ -7,7 +7,7 @@ import "fmt"
 import "os"
 
 
-// GetAESDecrypted decrypts given text in AES 256 CBC
+// Source (solving some minor mistakes): https://medium.com/insiderengineering/aes-encryption-and-decryption-in-golang-php-and-both-with-full-codes-ceb598a34f41
 func GetAESDecrypted(encrypted string, key string, iv string) ([]byte, error) {
 	ciphertext, err := base64.StdEncoding.DecodeString(encrypted)
 
@@ -33,7 +33,6 @@ func GetAESDecrypted(encrypted string, key string, iv string) ([]byte, error) {
 }
 
 
-// PKCS5UnPadding  pads a certain blob of data with necessary data to be used in AES block cipher
 func PKCS5UnPadding(src []byte) []byte {
 	
 	length := len(src)

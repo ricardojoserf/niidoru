@@ -22,11 +22,11 @@ func GetProcessByName(process_name string) []uintptr{
    var MAXIMUM_ALLOWED int = 0x02000000;
    var s uintptr = 0;
    for {
-      if (NtGetNextProcess(s, MAXIMUM_ALLOWED, 0, 0, uintptr(unsafe.Pointer(&s))) != 0) { break }
+      if (NGNP(s, MAXIMUM_ALLOWED, 0, 0, uintptr(unsafe.Pointer(&s))) != 0) { break }
 
       buf := [256]byte{}
       var mem_address uintptr = uintptr(unsafe.Pointer(&buf[0])); 
-      var res uintptr = GetProcessImageFileName(s, mem_address, len(buf));
+      var res uintptr = GPIFN(s, mem_address, len(buf));
 
       var res_string string = string(buf[0:res]);
       if (res > 1){
@@ -34,8 +34,6 @@ func GetProcessByName(process_name string) []uintptr{
          var index int = strings.Index(reverted_string, "\\");
          var result_name string = Reverse(reverted_string[0:index]);
          if (result_name == process_name){
-            // fmt.Println("[+] Process handle: \t", s, "(", fmt.Sprintf("0x%x", s), ")");
-            // fmt.Println("[+] Process name:   \t", process_name);
             proc_handles_slice = append(proc_handles_slice, s);
          }
       }
