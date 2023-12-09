@@ -5,7 +5,6 @@ import "fmt"
 import "unsafe"
 
 
-
 func CreateRemoteThread_Injection(process_name string, pid int, payload []byte){
    // Get PID
    if ((process_name == "") && (pid == 0)){

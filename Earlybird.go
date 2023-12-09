@@ -6,27 +6,6 @@ import "syscall"
 import "unsafe"
 
 
-func CreateProcess(lpApplicationName string, lpCommandLine string, lpProcessAttributes uintptr, lpThreadAttributes uintptr,
-   bInheritHandles uintptr, dwCreationFlags int, lpEnvironment uintptr, 
-   lpCurrentDirectory uintptr, lpStartupInfo uintptr, lpProcessInformation uintptr) uintptr {
-   ret, _, _ := syscall.NewLazyDLL("kernel32.dll").NewProc("CreateProcessA").Call(
-      uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpApplicationName))),
-      uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpCommandLine))),
-      uintptr(lpProcessAttributes),
-      uintptr(lpThreadAttributes),      
-      uintptr(bInheritHandles),
-      uintptr(dwCreationFlags),
-      uintptr(lpEnvironment),
-      // uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpCurrentDirectory))),
-      uintptr(lpCurrentDirectory),
-      uintptr(lpStartupInfo),
-      uintptr(lpProcessInformation),
-
-   )
-   return uintptr(ret)
-}
-
-
 func Earlybird_Injection(proc string, payload []byte) {
    // Check
    if (proc == ""){

@@ -94,7 +94,7 @@ func QueueUserAPC_Injection(process_name string, pid int, payload []byte) {
 
    // QueueUserAPC
    var queueUserAPC_res uintptr = QueueUserAPC(assigned_address, thread_handle, 0);
-   fmt.Println("[+] queueUserAPC_res:\t\t", queueUserAPC_res);
+   fmt.Println("[+] QueueUserAPC response:\t", queueUserAPC_res);
 
    // CloseHandle
    CloseHandle(thread_handle);
