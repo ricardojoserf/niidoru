@@ -24,7 +24,6 @@ var CH_str string = GetAESDecrypted_aux("I9BzKP3vnDqJJPYVcV38dw==", "N33dl3N33dl
 var CPA_str string = GetAESDecrypted_aux("vh75BCTVuMcYSGVlPwepdw==", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
 var CT32S_str string = GetAESDecrypted_aux("g/n9hfw7niVL7CLsh41CgpePOByTTsFMxU2f+AeHxtE=", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
 
-
 ///////////////
 // Structs ///
 ///////////////
@@ -37,6 +36,36 @@ type ThreadEntry32 struct {
    BasePri        int32
    DeltaPri       int32
    Flags          uint32
+}
+
+
+type StartupInfo struct {
+    Cb uint32
+
+    Desktop       *uint16
+    Title         *uint16
+    X             uint32
+    Y             uint32
+    XSize         uint32
+    YSize         uint32
+    XCountChars   uint32
+    YCountChars   uint32
+    FillAttribute uint32
+    Flags         uint32
+    ShowWindow    uint16
+
+    StdInput  uintptr
+    StdOutput uintptr
+    StdErr    uintptr
+    // contains filtered or unexported fields
+}
+
+
+type ProcessInformation struct {
+    Process   uintptr
+    Thread    uintptr
+    ProcessId uint32
+    ThreadId  uint32
 }
 
 
@@ -187,18 +216,15 @@ func CH(hProcess uintptr) uintptr {
 }
 
 
-func CP(lpApplicationName string, lpCommandLine string, lpProcessAttributes uintptr, lpThreadAttributes uintptr,
-   bInheritHandles uintptr, dwCreationFlags int, lpEnvironment uintptr, 
-   lpCurrentDirectory uintptr, lpStartupInfo uintptr, lpProcessInformation uintptr) uintptr {
+func CPA(lpApplicationName uintptr, lpCommandLine uintptr, lpProcessAttributes uintptr, lpThreadAttributes uintptr, bInheritHandles uint32, dwCreationFlags uint32, lpEnvironment uintptr,  lpCurrentDirectory uintptr, lpStartupInfo uintptr, lpProcessInformation uintptr) uintptr {
    ret, _, _ := syscall.NewLazyDLL(kernel32_str).NewProc(CPA_str).Call(
-      uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpApplicationName))),
-      uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpCommandLine))),
+      uintptr(lpApplicationName),
+      uintptr(lpCommandLine),
       uintptr(lpProcessAttributes),
-      uintptr(lpThreadAttributes),      
+      uintptr(lpThreadAttributes),
       uintptr(bInheritHandles),
       uintptr(dwCreationFlags),
       uintptr(lpEnvironment),
-      // uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpCurrentDirectory))),
       uintptr(lpCurrentDirectory),
       uintptr(lpStartupInfo),
       uintptr(lpProcessInformation),
@@ -239,4 +265,11 @@ func GetThreads(pid uintptr) []uint32 {
    }
    CH(uintptr(snapshot));
    return thread_ids_slice;
+}
+
+
+// Source: https://medium.com/@justen.walker/breaking-all-the-rules-using-go-to-call-windows-api-2cbfd8c79724
+func StringToCharPtr(str string) *uint8 {
+   chars := append([]byte(str), 0) // null terminated
+   return &chars[0]
 }
