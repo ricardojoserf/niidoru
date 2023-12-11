@@ -58,3 +58,9 @@ Then you can use the same commands as earlier replacing "go run ." with "niidoru
 ``` 
 niidoru.exe -m <METHOD> [ -p <PID> | -n <PROCESS_NAME> ] [ -h HEXADECIMAL_PAYLOAD ]
 ```
+
+------------------------------
+
+## AES encryption
+
+AES is used to obfuscate all the strings in the binary. To change the encrypted values you can use [this gist](https://gist.github.com/ricardojoserf/986b8be42b356da530469bbd32fa88fa), which is a small variation from this [other gist](https://gist.githubusercontent.com/aziza-kasenova/3aea2160cbaebc5a4ba1b9219cba612e/raw/32b3801369ce669b2b1bf89ca84d24f23b487579/AES256.go), just fixing a small problem with the padding. 
